@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import mermaid from "mermaid";
 
-const MERMAID_CONFIG: mermaid.Config = {
+const MERMAID_CONFIG: Parameters<typeof mermaid.initialize>[0] = {
   startOnLoad: false,
   securityLevel: "loose",
   theme: "dark",
