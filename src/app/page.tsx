@@ -59,7 +59,33 @@ const LANGUAGES: LanguageOption[] = [
     extensions: [".java"],
     accept: ".java",
   },
+  {
+    id: "python",
+    label: "Python",
+    extensions: [".py"],
+    accept: ".py",
+  },
 ];
+
+const SNIPPET_PLACEHOLDERS: Record<SupportedLanguage, string> = {
+  csharp: `public class DemoService
+{
+    public string Greet(string name) => $"Hello {name}";
+}`,
+  java: `public class DemoService {
+    private final String name;
+
+    public DemoService(String name) {
+        this.name = name;
+    }
+}`,
+  python: `class DemoService:
+    def __init__(self, name: str):
+        self.name = name
+
+    def greet(self):
+        return f"Hello {self.name}"`,
+};
 
 export default function Home() {
   const [files, setFiles] = useState<UploadedFile[]>([]);
@@ -273,6 +299,7 @@ export default function Home() {
 
   const canSaveSnippet = snippetContent.trim().length > 0;
   const canGenerate = files.length > 0 && !isParsing;
+  const snippetPlaceholder = SNIPPET_PLACEHOLDERS[language];
 
   const handleGenerate = useCallback(() => {
     if (!files.length) {
@@ -305,13 +332,15 @@ export default function Home() {
               value={language}
               onValueChange={(value) => {
                 const lang = value as SupportedLanguage;
+                const option =
+                  LANGUAGES.find((entry) => entry.id === lang) ?? LANGUAGES[0];
                 setLanguage(lang);
-                setSnippetName(`Snippet${lang === "java" ? ".java" : ".cs"}`);
+                setSnippetName(`Snippet${option.extensions[0]}`);
                 setFiles((current) =>
                   current.filter((file) =>
-                    lang === "java"
-                      ? file.name.toLowerCase().endsWith(".java")
-                      : file.name.toLowerCase().endsWith(".cs")
+                    option.extensions.some((extension) =>
+                      file.name.toLowerCase().endsWith(extension)
+                    )
                   )
                 );
               }}
@@ -421,7 +450,7 @@ export default function Home() {
                       onChange={(event) =>
                         setSnippetContent(event.target.value)
                       }
-                      placeholder={`public class Demo {\n    // ${selectedLanguage.label} code ...\n}`}
+                      placeholder={snippetPlaceholder}
                       rows={8}
                       className="resize-none bg-black/40 text-sm text-white placeholder:text-zinc-500"
                     />
