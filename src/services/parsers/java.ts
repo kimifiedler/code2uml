@@ -4,14 +4,14 @@ import type {
   SourceFile,
   UmlEntityKind,
   UmlMember,
-} from "../shared/uml-types";
+} from "@/types/uml";
 import { finalizeDiagram } from "../diagram/builder";
 import {
   findMatchingBrace,
   normalizeParams,
   stripGenerics,
   toAccess,
-} from "../shared/uml-utils";
+} from "@/utils/uml";
 
 export function createMermaidFromJavaSources(
   files: SourceFile[]

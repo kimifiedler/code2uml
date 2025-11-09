@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import mermaid from "mermaid";
 
-import { DARK_MERMAID_CONFIG } from "@/lib/mermaid/config";
+import { DARK_MERMAID_CONFIG } from "@/config/mermaid";
 
 let isConfigured = false;
 

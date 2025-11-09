@@ -1,9 +1,5 @@
-import type {
-  DiagramResult,
-  ParsedEntity,
-  UmlMember,
-} from "../shared/uml-types";
-import { stripGenerics } from "../shared/uml-utils";
+import type { DiagramResult, ParsedEntity, UmlMember } from "@/types/uml";
+import { stripGenerics } from "@/utils/uml";
 
 export function finalizeDiagram(entities: ParsedEntity[]): DiagramResult {
   if (!entities.length) {

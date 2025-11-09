@@ -3,7 +3,7 @@ import type {
   ParsedEntity,
   SourceFile,
   UmlMember,
-} from "../shared/uml-types";
+} from "@/types/uml";
 import { finalizeDiagram } from "../diagram/builder";
 
 export function createMermaidFromPythonSources(

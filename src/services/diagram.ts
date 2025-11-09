@@ -1,7 +1,7 @@
-import type { DiagramResult, SourceFile } from "../shared/uml-types";
-import { createMermaidFromSources as generateCsharp } from "../parsers/csharp";
-import { createMermaidFromJavaSources as generateJava } from "../parsers/java";
-import { createMermaidFromPythonSources as generatePython } from "../parsers/python";
+import type { DiagramResult, SourceFile } from "@/types/uml";
+import { createMermaidFromSources as generateCsharp } from "./parsers/csharp";
+import { createMermaidFromJavaSources as generateJava } from "./parsers/java";
+import { createMermaidFromPythonSources as generatePython } from "./parsers/python";
 
 export type SupportedLanguage = "csharp" | "java" | "python";
 
