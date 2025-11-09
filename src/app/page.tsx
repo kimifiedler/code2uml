@@ -247,7 +247,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#050505] pb-16 text-zinc-100">
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-neutral-900/60 via-black to-black" />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-linear-to-b from-neutral-900/60 via-black to-black" />
       <main className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-10 lg:px-8">
         <HeroSection
           language={language}
