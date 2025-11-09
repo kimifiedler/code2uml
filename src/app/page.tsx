@@ -28,7 +28,7 @@ export default function Home() {
   const [snippetContent, setSnippetContent] = useState("");
   const [inputMode, setInputMode] = useState<"upload" | "inline">("upload");
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const selectedLanguage = useMemo(
     () => LANGUAGES.find((option) => option.id === language) ?? LANGUAGES[0],
@@ -237,13 +237,10 @@ export default function Home() {
         LANGUAGES.find((entry) => entry.id === lang) ?? LANGUAGES[0];
       setLanguage(lang);
       setSnippetName(`Snippet${option.extensions[0]}`);
-      setFiles((current) =>
-        current.filter((file) =>
-          option.extensions.some((extension) =>
-            file.name.toLowerCase().endsWith(extension)
-          )
-        )
-      );
+      setFiles([]);
+      setDiagram(null);
+      setSvgMarkup("");
+      setError(null);
     },
     []
   );

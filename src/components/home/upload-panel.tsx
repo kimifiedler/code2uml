@@ -26,7 +26,7 @@ type UploadPanelProps = {
   selectedLanguage: LanguageOption;
   inputMode: "upload" | "inline";
   isDragging: boolean;
-  fileInputRef: RefObject<HTMLInputElement>;
+  fileInputRef: RefObject<HTMLInputElement | null>;
   snippetName: string;
   snippetContent: string;
   snippetPlaceholder: string;
