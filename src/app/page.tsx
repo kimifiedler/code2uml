@@ -31,6 +31,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import mermaid from "mermaid";
+
+import { DARK_MERMAID_CONFIG, LIGHT_MERMAID_CONFIG } from "@/lib/mermaid/config";
 import type { DiagramResult, SourceFile } from "@/lib/shared/uml-types";
 import { generateDiagram, SupportedLanguage } from "@/lib/diagram/service";
 
@@ -259,18 +262,38 @@ export default function Home() {
     await navigator.clipboard.writeText(diagram.mermaid);
   }, [diagram?.mermaid]);
 
-  const downloadSvg = useCallback(() => {
-    if (!svgMarkup) {
+  const downloadSvg = useCallback(async () => {
+    if (typeof window === "undefined") {
       return;
     }
-    const blob = new Blob([svgMarkup], { type: "image/svg+xml" });
+
+    let exportMarkup = svgMarkup;
+
+    if (diagram?.mermaid?.trim()) {
+      try {
+        const id = `download-${Date.now()}`;
+        mermaid.initialize(LIGHT_MERMAID_CONFIG);
+        const { svg } = await mermaid.render(id, diagram.mermaid);
+        exportMarkup = svg;
+      } catch (error) {
+        console.error("Unable to render light SVG for download", error);
+      } finally {
+        mermaid.initialize(DARK_MERMAID_CONFIG);
+      }
+    }
+
+    if (!exportMarkup) {
+      return;
+    }
+
+    const blob = new Blob([exportMarkup], { type: "image/svg+xml" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
     link.download = "uml-diagram.svg";
     link.click();
     URL.revokeObjectURL(url);
-  }, [svgMarkup]);
+  }, [diagram?.mermaid, svgMarkup]);
 
   const stats = useMemo(() => {
     if (!diagram) {

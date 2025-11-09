@@ -3,22 +3,7 @@
 import { useEffect, useState } from "react";
 import mermaid from "mermaid";
 
-const MERMAID_CONFIG: Parameters<typeof mermaid.initialize>[0] = {
-  startOnLoad: false,
-  securityLevel: "loose",
-  theme: "dark",
-  deterministicIds: true,
-  themeVariables: {
-    primaryColor: "#050505",
-    primaryTextColor: "#f5f5f5",
-    primaryBorderColor: "#1f1f1f",
-    lineColor: "#f5f5f5",
-    fontSize: "14px",
-    fontFamily: "var(--font-geist-sans, 'Geist Sans', 'Inter', sans-serif)",
-    edgeLabelBackground: "#0f0f0f",
-    background: "#000000",
-  },
-};
+import { DARK_MERMAID_CONFIG } from "@/lib/mermaid/config";
 
 let isConfigured = false;
 
@@ -27,7 +12,7 @@ function ensureMermaidConfigured() {
     return;
   }
   if (typeof window !== "undefined") {
-    mermaid.initialize(MERMAID_CONFIG);
+    mermaid.initialize(DARK_MERMAID_CONFIG);
     isConfigured = true;
   }
 }
