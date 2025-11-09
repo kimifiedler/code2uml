@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
-import { generateDiagram, SupportedLanguage } from "@/lib/diagram-service";
-import type { SourceFile } from "@/lib/uml-types";
+import { generateDiagram, SupportedLanguage } from "@/lib/diagram/service";
+import type { SourceFile } from "@/lib/shared/uml-types";
 
 export async function POST(request: Request) {
   try {

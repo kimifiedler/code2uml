@@ -4,14 +4,14 @@ import type {
   SourceFile,
   UmlEntityKind,
   UmlMember,
-} from "./uml-types";
-import { finalizeDiagram } from "./diagram-builder";
+} from "../shared/uml-types";
+import { finalizeDiagram } from "../diagram/builder";
 import {
   findMatchingBrace,
   normalizeParams,
   stripGenerics,
   toAccess,
-} from "./uml-utils";
+} from "../shared/uml-utils";
 
 /**
  * Converts one or more C# source files into a Mermaid class diagram.

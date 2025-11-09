@@ -3,8 +3,8 @@ import type {
   ParsedEntity,
   SourceFile,
   UmlMember,
-} from "./uml-types";
-import { finalizeDiagram } from "./diagram-builder";
+} from "../shared/uml-types";
+import { finalizeDiagram } from "../diagram/builder";
 
 export function createMermaidFromPythonSources(
   files: SourceFile[]

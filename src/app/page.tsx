@@ -31,8 +31,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import type { DiagramResult, SourceFile } from "@/lib/uml-types";
-import { generateDiagram, SupportedLanguage } from "@/lib/diagram-service";
+import type { DiagramResult, SourceFile } from "@/lib/shared/uml-types";
+import { generateDiagram, SupportedLanguage } from "@/lib/diagram/service";
 
 type UploadedFile = SourceFile & {
   id: string;
