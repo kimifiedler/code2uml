@@ -31,11 +31,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  DiagramResult,
-  SourceFile,
-  createMermaidFromSources,
-} from "@/lib/csharp-parser";
+import type { DiagramResult, SourceFile } from "@/lib/uml-types";
+import { generateDiagram, SupportedLanguage } from "@/lib/diagram-service";
 
 type UploadedFile = SourceFile & {
   id: string;
@@ -43,7 +40,7 @@ type UploadedFile = SourceFile & {
 };
 
 type LanguageOption = {
-  id: string;
+  id: SupportedLanguage;
   label: string;
   extensions: string[];
   accept: string;
@@ -56,6 +53,12 @@ const LANGUAGES: LanguageOption[] = [
     extensions: [".cs"],
     accept: ".cs",
   },
+  {
+    id: "java",
+    label: "Java",
+    extensions: [".java"],
+    accept: ".java",
+  },
 ];
 
 export default function Home() {
@@ -65,8 +68,10 @@ export default function Home() {
   const [isParsing, setIsParsing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [svgMarkup, setSvgMarkup] = useState("");
-  const [language, setLanguage] = useState(LANGUAGES[0].id);
-  const [snippetName, setSnippetName] = useState("Snippet.cs");
+  const [language, setLanguage] = useState<SupportedLanguage>("csharp");
+  const [snippetName, setSnippetName] = useState(
+    `Snippet${LANGUAGES[0].extensions[0]}`
+  );
   const [snippetContent, setSnippetContent] = useState("");
   const [inputMode, setInputMode] = useState<"upload" | "inline">("upload");
 
@@ -146,21 +151,24 @@ export default function Home() {
     [matchesLanguage, readFile, selectedLanguage]
   );
 
-  const buildDiagram = useCallback((payload: UploadedFile[]) => {
-    if (!payload.length) {
-      setDiagram(null);
-      setSvgMarkup("");
-      return;
-    }
-    try {
-      const result = createMermaidFromSources(payload);
-      setDiagram(result);
-      setError(null);
-    } catch {
-      setDiagram(null);
-      setError("Generating the diagram failed. Please review your files.");
-    }
-  }, []);
+  const buildDiagram = useCallback(
+    (payload: UploadedFile[]) => {
+      if (!payload.length) {
+        setDiagram(null);
+        setSvgMarkup("");
+        return;
+      }
+      try {
+        const result = generateDiagram(language, payload);
+        setDiagram(result);
+        setError(null);
+      } catch {
+        setDiagram(null);
+        setError("Generating the diagram failed. Please review your files.");
+      }
+    },
+    [language]
+  );
 
   const onDrop = useCallback(
     (event: React.DragEvent<HTMLDivElement>) => {
@@ -293,7 +301,21 @@ export default function Home() {
             <span className="text-sm uppercase tracking-wide text-zinc-400">
               Language
             </span>
-            <Select value={language} onValueChange={setLanguage}>
+            <Select
+              value={language}
+              onValueChange={(value) => {
+                const lang = value as SupportedLanguage;
+                setLanguage(lang);
+                setSnippetName(`Snippet${lang === "java" ? ".java" : ".cs"}`);
+                setFiles((current) =>
+                  current.filter((file) =>
+                    lang === "java"
+                      ? file.name.toLowerCase().endsWith(".java")
+                      : file.name.toLowerCase().endsWith(".cs")
+                  )
+                );
+              }}
+            >
               <SelectTrigger className="w-full max-w-xs bg-black/40 text-left text-sm text-white">
                 <SelectValue placeholder="Choose language" />
               </SelectTrigger>

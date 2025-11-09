@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
-import { createMermaidFromSources, SourceFile } from "@/lib/csharp-parser";
+import { generateDiagram, SupportedLanguage } from "@/lib/diagram-service";
+import type { SourceFile } from "@/lib/uml-types";
 
 export async function POST(request: Request) {
   try {
@@ -12,17 +13,22 @@ export async function POST(request: Request) {
       );
     }
 
+    const language: SupportedLanguage =
+      payload.language === "java" ? "java" : "csharp";
+
+    const fallbackName = language === "java" ? "Snippet.java" : "Snippet.cs";
+
     const files: SourceFile[] = payload.files
       .filter(
         (file: SourceFile) =>
           typeof file?.name === "string" && typeof file?.content === "string"
       )
       .map((file: SourceFile) => ({
-        name: file.name.trim() || "Unbenannt.cs",
+        name: file.name.trim() || fallbackName,
         content: file.content,
       }));
 
-    const result = createMermaidFromSources(files);
+    const result = generateDiagram(language, files);
     return NextResponse.json(result);
   } catch (error) {
     console.error("diagram generation failed", error);

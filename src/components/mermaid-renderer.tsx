@@ -90,7 +90,7 @@ export function MermaidRenderer({ chart, onRendered }: MermaidRendererProps) {
 
   if (!svg) {
     return (
-      <div className="flex h-full items-center justify-center rounded-md border border-dashed border-border/40 bg-gradient-to-b from-neutral-900/30 to-neutral-900/10 px-4 py-10 text-sm text-muted-foreground">
+      <div className="flex h-full items-center justify-center rounded-md border border-dashed border-border/40 bg-linear-to-b from-neutral-900/30 to-neutral-900/10 px-4 py-10 text-sm text-muted-foreground">
         No diagram yet. Upload compatible files to get started.
       </div>
     );
